@@ -2,4 +2,4 @@
 Experiments with google blockly
 
 
-![https://i.imgur.com/OOGqaRL.png]
+![](https://i.imgur.com/OOGqaRL.png)
