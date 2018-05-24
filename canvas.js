@@ -26,7 +26,6 @@ Blockly.Blocks['draw_circle'] = {
   init: function() {
     this.appendDummyInput().appendField('draw_circle: ');
     this.appendValueInput('VALUE')
-        .setCheck('String')
     this.setInputsInline(true);
     this.setPreviousStatement(true, null);
     this.setNextStatement(true, null);
@@ -41,9 +40,9 @@ Blockly.JavaScript['draw_circle'] = function(block) {
   return 'draw_circle (' + argument0 + ');\n';
 };
 
-function draw_circle (text) {  
+function draw_circle (size) {  
 ctx.beginPath();
-ctx.arc(x, y, 40, 0, 2 * Math.PI);
+ctx.arc(x, y, size, 0, 2 * Math.PI);
 ctx.stroke();
 }
 
@@ -116,12 +115,12 @@ Blockly.JavaScript['move_to'] = function(block) {
   var x = Blockly.JavaScript.valueToCode(block, 'VALUEX',
       Blockly.JavaScript.ORDER_FUNCTION_CALL) || '\'\'';
   var y = Blockly.JavaScript.valueToCode(block, 'VALUEY',
-      Blockly.JavaScript.ORDER_FUNCTION_CALL) || '\'\'';   
+      Blockly.JavaScript.ORDER_FUNCTION_CALL) || '\'\'';  
   return 'move_to (' + x + ',' + y + ');\n';
 };
 
-function move_to (posx,posy) { 
-x = posx;
-y = posy;
-ctx.moveTo(posx, posy);
+function move_to (movex,movey) {
+    x = movex;
+    y = movey;
+    ctx.moveTo(x,y);
 }
