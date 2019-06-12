@@ -18,6 +18,18 @@ Blockly.JavaScript['show_text'] = function(block) {
   return cmd;
 };
 
+Blockly.Python['show_text'] = function(block) {
+  var text = Blockly.Python.valueToCode(block, 'TEXT',
+      Blockly.Python.ORDER_FUNCTION_CALL) || '\'\'';
+  var cmd = 'font = pygame.font.Font(\'freesansbold.ttf\',20)\n';
+  cmd += 'text = font.render(' + text + ', True, colour, white)\n';
+  cmd += 'textRect = text.get_rect() \n';
+  cmd += 'textRect.center = (X,Y) \n';
+  cmd += 'screen.blit(text, textRect) \n';
+  return cmd;
+};
+
+
 // Set the drawing colour
 Blockly.Blocks['set_colour'] = {
   init: function() {
@@ -36,6 +48,17 @@ Blockly.JavaScript['set_colour'] = function(block) {
   var cmd ='ctx.strokeStyle = ' + colour + ';\n';
   return cmd;
 };
+Blockly.Python['set_colour'] = function(block) {
+  var colour = Blockly.Python.valueToCode(block, 'VALUE',
+      Blockly.Python.ORDER_FUNCTION_CALL) || '\'\'';
+  var cmd ='\ndef hex_to_rgb(value):\n';
+  cmd += '    value = value.lstrip(\'#\')\n';
+  cmd += '    lv = len(value)\n';
+  cmd += '    return tuple(int(value[i:i + lv // 3], 16) for i in range(0, lv, lv // 3))\n\n';
+
+  cmd += 'colour = hex_to_rgb(' + colour + ');\n';
+  return cmd;
+};
 
 //Draw a circle
 Blockly.Blocks['draw_circle'] = {
@@ -52,13 +75,19 @@ Blockly.Blocks['draw_circle'] = {
 Blockly.JavaScript['draw_circle'] = function(block) {
   var radius = Blockly.JavaScript.valueToCode(block, 'RADIUS',
       Blockly.JavaScript.ORDER_FUNCTION_CALL) || '\'\'';
-  var cmd = '// Draw circle\n'
-  cmd+= 'ctx.beginPath();\n';
+  var cmd = '// Draw circle\n';
+  cmd += 'ctx.beginPath();\n';
   cmd += 'ctx.arc(x, y, ' + radius + ', 0, 2 * Math.PI);\n';
   cmd += 'ctx.stroke();\n\n';
   return cmd;
 };
 
+Blockly.Python['draw_circle'] = function(block) {
+  var radius = Blockly.Python.valueToCode(block, 'RADIUS',
+      Blockly.Python.ORDER_FUNCTION_CALL) || '\'\'';
+  var cmd = 'pygame.draw.circle(screen,colour,(X,Y),' + radius + ',2);\n';
+  return cmd;
+};
 
 //Draw a line
 Blockly.Blocks['draw_line'] = {
@@ -82,6 +111,14 @@ Blockly.JavaScript['draw_line'] = function(block) {
   cmd += 'ctx.stroke();\n';
   return cmd;
 };
+Blockly.Python['draw_line'] = function(block) {
+  var argument0 = Blockly.Python.valueToCode(block, 'VALUE1',
+      Blockly.Python.ORDER_FUNCTION_CALL) || '\'\'';
+  var argument1 = Blockly.Python.valueToCode(block, 'VALUE2',
+      Blockly.Python.ORDER_FUNCTION_CALL) || '\'\'';   
+  var cmd = 'pygame.draw.line(screen,colour,(X,Y),(' + argument0 + ',' + argument1 + '));\n';
+  return cmd;
+};
 
 //Clear the Canvas
 Blockly.Blocks['clear_screen'] = {
@@ -100,6 +137,17 @@ Blockly.JavaScript['clear_screen'] = function(block) {
   cmd+='var x = c.width / 2 ;\n';
   cmd+='var y = c.height / 2 ;\n';
   cmd += 'ctx.clearRect(0, 0, c.width, c.height);\n\n';
+  return cmd;
+};
+Blockly.Python['clear_screen'] = function(block) {
+  Blockly.Python.definitions_['import_pygame'] = 'import pygame';
+  var cmd = 'X = Y = 200\n';
+  cmd += 'white = (255,255,255)\n';
+  cmd += 'black = (0,0,0)\n';
+  cmd += 'colour = black\n';
+  cmd += 'pygame.init()\n';
+  cmd += 'screen = pygame.display.set_mode((400, 300))\n';
+  cmd += 'screen.fill(white)\n\n';
   return cmd;
 };
  
@@ -123,7 +171,16 @@ Blockly.JavaScript['move_to'] = function(block) {
       Blockly.JavaScript.ORDER_FUNCTION_CALL) || '\'\'';
   var y = Blockly.JavaScript.valueToCode(block, 'VALUEY',
       Blockly.JavaScript.ORDER_FUNCTION_CALL) || '\'\'';  
-  var cmd = 'ctx.moveTo (' + x + ',' + y + ');\n';
+  var cmd = 'x = ' + x + '; y = ' + y + ';\n';
+  cmd += 'ctx.moveTo (x,y);\n';
   return cmd;
 };
 
+Blockly.Python['move_to'] = function(block) {
+  var x = Blockly.Python.valueToCode(block, 'VALUEX',
+      Blockly.Python.ORDER_FUNCTION_CALL) || '\'\'';
+  var y = Blockly.Python.valueToCode(block, 'VALUEY',
+      Blockly.Python.ORDER_FUNCTION_CALL) || '\'\'';  
+  var cmd = 'x = ' + x + '; y = ' + y + ';\n';
+  return cmd;
+};
